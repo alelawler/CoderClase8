@@ -4,7 +4,6 @@ import {CartManager} from "./../../CartManager.js";
 export const cartRouter = Router();
 
 const CM = new CartManager("src/DBCartManager.txt");
-
 cartRouter.post('/', async (req,res) =>{
  let msg =  await CM.createCart();
  res.json(msg);

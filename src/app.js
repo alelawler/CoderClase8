@@ -1,16 +1,25 @@
 import express, { Router } from "express";
+import handlebars from "express-handlebars";
+import path from "path";
+import {viewsRouter} from "./routes/views/views.router.js";
 import {productsRouter} from "./routes/v1/products.router.js";
 import {productsRouterV2} from "./routes/v2/products.router.js";
 import {cartRouter} from "./routes/v1/cart.router.js";
+import { __dirname } from "./utils.js";
+import {Server} from "socket.io";
 
 const app = express();
+
+app.engine("handlebars",handlebars.engine())
+app.set("views",__dirname+"/views");
+app.set("view engine","handlebars");
+
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
+
+app.use(express.static(path.join(__dirname, "public")));
 const port = 8080;
 
-//Practicando con versionado. La version 1 es la de la clase 8
-//No se muy bien cual es la convencion de routeado y versionado
-//Si tenes algun comentario estaria genial. Gracias ♥
 //---------------------v1------------------------
 const router = express.Router();
 app.use('/api/v1', router);
@@ -22,7 +31,15 @@ const routerV2 = express.Router();
 app.use('/api/v2', routerV2);
 routerV2.use('/products', productsRouterV2);
 
+//----------------------views----------------------
+const routerViews = express.Router();
+app.use("/",viewsRouter);
 
-app.listen(port, ()=> {
+const httpServer = app.listen(port, ()=> {
     console.log('Server up in http://localhost:'+port)
+});
+
+export const socketServer = new Server(httpServer);
+
+socketServer.on('connection',socket => {
 });

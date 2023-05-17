@@ -17,7 +17,6 @@ productsRouter.get('/', async (req, res) => {
     }
 
     res.json(products);
-
 });
 
 productsRouter.get('/:pid', async (req, res) => {

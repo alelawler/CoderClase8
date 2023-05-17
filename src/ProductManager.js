@@ -1,4 +1,5 @@
 import fs from 'fs';
+import { socketServer } from "./app.js";
 
 export class ProductManager {
   #path;
@@ -88,6 +89,7 @@ export class ProductManager {
 
       let productString = JSON.stringify(this.#products);
       await fs.promises.writeFile(this.#path, productString);
+      this.#updateProductsSocket();
       return "Product added with id: " + product.id;
     }
     else {
@@ -146,6 +148,7 @@ export class ProductManager {
       this.#products.splice(productIndex, 1);
       let productString = JSON.stringify(this.#products);
       await fs.promises.writeFile(this.#path, productString);
+      this.#updateProductsSocket();
       return "Product id N°: " + id + " deleted.";
     }
     else
@@ -170,6 +173,9 @@ export class ProductManager {
     else {
       return false;
     }
+  }
+  #updateProductsSocket(){
+    socketServer.emit("update",this.#products);
   }
 }
 class Product {

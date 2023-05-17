@@ -1,0 +1,17 @@
+REALTIME
+<br>
+<div id="allProductsSocket">
+    {{#each allProducts}}
+id:{{this.id}} -
+title:{{this.title}} -
+description:{{this.description}} -
+price:{{this.price}} -
+code:{{this.code}} -
+stock:{{this.stock}} -
+status:{{this.status}} -
+category:{{this.category}}
+<br>
+{{/each}}
+</div>
+<script src="/socket.io/socket.io.js"></script>
+<script src="js/index.js"></script>
